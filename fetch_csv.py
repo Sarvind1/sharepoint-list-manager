@@ -1,11 +1,12 @@
+import os
 import requests
 import csv
 import json
 import sys
 from io import StringIO
 
-# Power Automate webhook URL
-url = "https://default0922decaaf3c4870acea84b9557b04.6a.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/44beb61d9191460db68d59f67b7c87b3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=y72LE0O_3WwR5RidMhN4MM6ZrHdegK6wayOf7Vt2EIw"
+# Power Automate webhook URL (set via environment variable)
+url = os.getenv("POWER_AUTOMATE_WEBHOOK_URL")
 
 def fetch_csv_data(list_name):
     """
@@ -16,6 +17,8 @@ def fetch_csv_data(list_name):
 
     Returns the response content.
     """
+    if not url:
+        raise ValueError("POWER_AUTOMATE_WEBHOOK_URL environment variable is not set.")
     try:
         # Prepare request body with list name
         payload = {"list_name": list_name}
